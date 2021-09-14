@@ -180,22 +180,18 @@ class API extends Api {
     String accountAddress, {
     String? appName,
   }) async {
-    Map<String, dynamic> resp = await _post(
+/*     Map<String, dynamic> resp = await _post(
       'v2/login/wallet/request',
       body: {
         "phoneNumber": phoneNumber,
         "accountAddress": accountAddress,
         "appName": appName
       },
-    );
-    if (resp["token"] != "") {
-      _jwtToken = resp["token"];
-      _phoneNumber = phoneNumber;
-      _accountAddress = accountAddress;
-      return _jwtToken;
-    } else {
-      throw 'Error! Login verify failed - phoneNumber: $phoneNumber';
-    }
+    ); */
+    _jwtToken = accountAddress;
+    _phoneNumber = phoneNumber;
+    _accountAddress = accountAddress;
+    return _jwtToken;
   }
 
   Future<dynamic> createWallet({String? communityAddress}) async {
@@ -220,7 +216,16 @@ class API extends Api {
   }
 
   Future<dynamic> getWallet() async {
-    Map<String, dynamic> resp = await _get('v2/wallets', private: true);
+    return Future.value({
+      "walletAddress": _jwtToken,
+      "accountAddress": _jwtToken,
+      "networks": ['mainnet', 'testnet'],
+      "backup": false,
+      "phoneNumber": "1",
+      "communityManager": "",
+      "transferManager": ""
+    });
+/*     Map<String, dynamic> resp = await _get('v2/wallets', private: true);
     if (resp["data"] != null) {
       return {
         "phoneNumber": resp["data"]["phoneNumber"],
@@ -238,7 +243,7 @@ class API extends Api {
       };
     } else {
       return {};
-    }
+    } */
   }
 
   Future<Map<String, dynamic>> getActionsByWalletAddress(
@@ -246,23 +251,25 @@ class API extends Api {
     int updatedAt = 0,
     String? tokenAddress,
   }) async {
-    String url = 'v2/wallets/actions/$walletAddress?updatedAt=$updatedAt';
+    return {};
+/*     String url = 'v2/wallets/actions/$walletAddress?updatedAt=$updatedAt';
     url = tokenAddress != null ? '$url&tokenAddress=$tokenAddress' : url;
     Map<String, dynamic> resp = await _get(
       url,
       private: true,
     );
-    return resp['data'];
+    return resp['data']; */
   }
 
   Future<dynamic> getAvailableUpgrades(
     String walletAddress,
   ) async {
-    Map<String, dynamic> resp = await _get(
+    return [];
+/*     Map<String, dynamic> resp = await _get(
       'v2/wallets/upgrades/available/$walletAddress',
       private: true,
     );
-    return resp['data'];
+    return resp['data']; */
   }
 
   Future<dynamic> installUpgrades(
