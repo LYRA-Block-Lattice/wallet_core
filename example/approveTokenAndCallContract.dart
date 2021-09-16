@@ -40,7 +40,7 @@
 //   num tokenAmount = 0.1;
 //   num tokenDecimals = 18;
 
-//   EthereumAddress receiver = EthereumAddress.fromHex(receiverAddress);
+//   LyraAddress receiver = LyraAddress.fromHex(receiverAddress);
 //   Decimal tokensAmountDecimal = Decimal.parse(tokenAmount.toString());
 //   Decimal decimals = Decimal.parse(pow(10, tokenDecimals).toString());
 //   BigInt amount = BigInt.parse((tokensAmountDecimal * decimals).toString());

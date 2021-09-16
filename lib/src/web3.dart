@@ -108,9 +108,9 @@ class Web3 {
   }
 
   Future<EtherAmount> getBalance({String? address}) async {
-    EthereumAddress a;
+    LyraAddress a;
     if (address != null && address != "") {
-      a = EthereumAddress.fromHex(address);
+      a = LyraAddress.fromHex(address);
     } else {
       a = await _credentials.extractAddress();
     }
@@ -128,7 +128,7 @@ class Web3 {
       throw 'transaction not approved';
     }
 
-    EthereumAddress receiver = EthereumAddress.fromHex(receiverAddress);
+    LyraAddress receiver = LyraAddress.fromHex(receiverAddress);
     EtherAmount amount = EtherAmount.fromUnitAndValue(
       EtherUnit.wei,
       BigInt.from(amountInWei),
@@ -148,7 +148,7 @@ class Web3 {
     String abi = ABI.get(contractName);
     DeployedContract contract = DeployedContract(
       ContractAbi.fromJson(abi, contractName),
-      EthereumAddress.fromHex(contractAddress),
+      LyraAddress.fromHex(contractAddress),
     );
     return contract;
   }
@@ -203,9 +203,9 @@ class Web3 {
   }) async {
     List<dynamic> params = [];
     if (address != null && address != "") {
-      params = [EthereumAddress.fromHex(address)];
+      params = [LyraAddress.fromHex(address)];
     } else {
-      EthereumAddress address = await _credentials.extractAddress();
+      LyraAddress address = await _credentials.extractAddress();
       params = [address];
     }
     final List<dynamic> response = await _readFromContract(
@@ -222,14 +222,14 @@ class Web3 {
     String spender, {
     String? owner,
   }) async {
-    List<EthereumAddress> params = [];
+    List<LyraAddress> params = [];
     if (owner != null && owner != "") {
-      params.add(EthereumAddress.fromHex(owner));
+      params.add(LyraAddress.fromHex(owner));
     } else {
-      EthereumAddress address = await _credentials.extractAddress();
+      LyraAddress address = await _credentials.extractAddress();
       params.add(address);
     }
-    params.add(EthereumAddress.fromHex(spender));
+    params.add(LyraAddress.fromHex(spender));
     final List<dynamic> response = await _readFromContract(
       'BasicToken',
       tokenAddress,
@@ -244,7 +244,7 @@ class Web3 {
     String receiverAddress,
     num tokensAmount,
   ) async {
-    EthereumAddress receiver = EthereumAddress.fromHex(receiverAddress);
+    LyraAddress receiver = LyraAddress.fromHex(receiverAddress);
     dynamic tokenDetails = await getTokenDetails(tokenAddress);
     int tokenDecimals = int.parse(tokenDetails["decimals"].toString());
     Decimal tokensAmountDecimal = Decimal.parse(tokensAmount.toString());
@@ -323,7 +323,7 @@ class Web3 {
     int tokenDecimals, {
     String? network = "fuse",
   }) async {
-    EthereumAddress wallet = EthereumAddress.fromHex(walletAddress);
+    LyraAddress wallet = LyraAddress.fromHex(walletAddress);
     Decimal tokensAmountDecimal = Decimal.parse(tokenAmount.toString());
     Decimal decimals = Decimal.parse(pow(10, tokenDecimals).toString());
     BigInt amount = BigInt.parse((tokensAmountDecimal * decimals).toString());
@@ -380,8 +380,8 @@ class Web3 {
       _communityManagerContractAddress,
     );
     Uint8List data = contract.function('joinCommunity').encodeCall([
-      EthereumAddress.fromHex(walletAddress),
-      EthereumAddress.fromHex(communityAddress)
+      LyraAddress.fromHex(walletAddress),
+      LyraAddress.fromHex(communityAddress)
     ]);
     String encodedData = '0x' + HEX.encode(data);
     print('encodedData: $encodedData');
@@ -424,11 +424,11 @@ class Web3 {
     String network = "fuse",
     Map? transactionBody,
   }) async {
-    EthereumAddress wallet = EthereumAddress.fromHex(walletAddress);
-    EthereumAddress token = EthereumAddress.fromHex(
+    LyraAddress wallet = LyraAddress.fromHex(walletAddress);
+    LyraAddress token = LyraAddress.fromHex(
       Variables.NATIVE_TOKEN_ADDRESS,
     );
-    EthereumAddress receiver = EthereumAddress.fromHex(receiverAddress);
+    LyraAddress receiver = LyraAddress.fromHex(receiverAddress);
     BigInt amount = BigInt.from(amountInWei);
 
     String nonce = await getNonceForRelay();
@@ -478,8 +478,8 @@ class Web3 {
     Map? transactionBody,
     String? methodName = 'transferToken',
   }) async {
-    EthereumAddress wallet = EthereumAddress.fromHex(walletAddress);
-    EthereumAddress newModule = EthereumAddress.fromHex(enableModuleAddress);
+    LyraAddress wallet = LyraAddress.fromHex(walletAddress);
+    LyraAddress newModule = LyraAddress.fromHex(enableModuleAddress);
     String nonce = await getNonceForRelay();
     DeployedContract contract = await _contract(
       disableModuleName,
@@ -524,9 +524,9 @@ class Web3 {
     String? network,
     String? externalId,
   }) async {
-    EthereumAddress wallet = EthereumAddress.fromHex(walletAddress);
-    EthereumAddress token = EthereumAddress.fromHex(tokenAddress);
-    EthereumAddress receiver = EthereumAddress.fromHex(receiverAddress);
+    LyraAddress wallet = LyraAddress.fromHex(walletAddress);
+    LyraAddress token = LyraAddress.fromHex(tokenAddress);
+    LyraAddress receiver = LyraAddress.fromHex(receiverAddress);
     dynamic tokenDetails = await getTokenDetails(tokenAddress);
     int tokenDecimals = int.parse(tokenDetails["decimals"].toString());
     String tokenSymbol = tokenDetails["symbol"];
@@ -593,16 +593,16 @@ class Web3 {
     String? network = "fuse",
     Map? transactionBody,
   }) async {
-    EthereumAddress wallet = EthereumAddress.fromHex(walletAddress);
-    EthereumAddress token = EthereumAddress.fromHex(tokenAddress);
+    LyraAddress wallet = LyraAddress.fromHex(walletAddress);
+    LyraAddress token = LyraAddress.fromHex(tokenAddress);
     dynamic tokenDetails = await getTokenDetails(tokenAddress);
     int tokenDecimals = int.parse(tokenDetails["decimals"].toString());
     Decimal tokensAmountDecimal = Decimal.parse(tokensAmount.toString());
     Decimal decimals = Decimal.parse(pow(10, tokenDecimals).toString());
     BigInt amount = BigInt.parse((tokensAmountDecimal * decimals).toString());
-    EthereumAddress spender = wallet;
+    LyraAddress spender = wallet;
     if (spenderContract != null) {
-      spender = EthereumAddress.fromHex(spenderContract);
+      spender = LyraAddress.fromHex(spenderContract);
     }
 
     String nonce = await getNonceForRelay();
@@ -649,8 +649,8 @@ class Web3 {
     num? ethAmount,
     BigInt? amountInWei,
   }) async {
-    EthereumAddress wallet = EthereumAddress.fromHex(walletAddress);
-    EthereumAddress contract = EthereumAddress.fromHex(contractAddress);
+    LyraAddress wallet = LyraAddress.fromHex(walletAddress);
+    LyraAddress contract = LyraAddress.fromHex(contractAddress);
     Uint8List callContractData;
     String encodedCallContractData;
     String nonce = await getNonceForRelay();
@@ -714,9 +714,9 @@ class Web3 {
     Map? transactionBody,
     Map? txMetadata,
   }) async {
-    EthereumAddress wallet = EthereumAddress.fromHex(walletAddress);
-    EthereumAddress token = EthereumAddress.fromHex(tokenAddress);
-    EthereumAddress contract = EthereumAddress.fromHex(contractAddress);
+    LyraAddress wallet = LyraAddress.fromHex(walletAddress);
+    LyraAddress token = LyraAddress.fromHex(tokenAddress);
+    LyraAddress contract = LyraAddress.fromHex(contractAddress);
     dynamic tokenDetails = await getTokenDetails(tokenAddress);
     int tokenDecimals = int.parse(tokenDetails["decimals"].toString());
     Decimal tokensAmountDecimal = Decimal.parse(tokensAmount.toString());
@@ -784,7 +784,7 @@ class Web3 {
     int tokenDecimals, {
     String network = 'mainnet',
   }) async {
-    EthereumAddress token = EthereumAddress.fromHex(tokenAddress);
+    LyraAddress token = LyraAddress.fromHex(tokenAddress);
     Decimal tokensAmountDecimal = Decimal.parse(tokensAmount.toString());
     Decimal decimals = Decimal.parse(pow(10, tokenDecimals).toString());
     BigInt amount = BigInt.parse((tokensAmountDecimal * decimals).toString());
@@ -823,7 +823,7 @@ class Web3 {
     Decimal tokensAmountDecimal = Decimal.parse(tokensAmount.toString());
     Decimal decimals = Decimal.parse(pow(10, tokenDecimals).toString());
     BigInt amount = BigInt.parse((tokensAmountDecimal * decimals).toString());
-    EthereumAddress bridgeMediatorAddress = EthereumAddress.fromHex(
+    LyraAddress bridgeMediatorAddress = LyraAddress.fromHex(
       homeBridgeMediatorAddress,
     );
     Map approveTokenData = await approveTokenOffChain(
