@@ -56,6 +56,10 @@ class Web3 {
     return bip39.validateMnemonic(mnemonic);
   }
 
+  static String hexPrivateKey(LyraPrivateKey lyraPrivateKey) {
+    return HEX.encode(lyraPrivateKey.privateKey);
+  }
+
   static String privateKeyFromMnemonic(String mnemonic, {int childIndex = 0}) {
     String seed = bip39.mnemonicToSeedHex(mnemonic);
     bip32.BIP32 root = bip32.BIP32.fromSeed(HEX.decode(seed) as Uint8List);
