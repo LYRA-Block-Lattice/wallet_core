@@ -37,7 +37,7 @@ class Web3 {
     required String daiPointsManagerAddress,
     required String transferManagerAddress,
     int defaultGasLimit = Variables.DEFAULT_GAS_LIMIT,
-  })  : _client = new Web3Client(url, new Client()),
+  })  : _client = new Web3Client(url),
         _approveCb = approveCb(),
         _networkId = networkId,
         _defaultCommunityContractAddress = defaultCommunityAddress,
@@ -84,31 +84,30 @@ class Web3 {
     Transaction transaction,
   ) async {
     print('sendTransactionAndWaitForReceipt');
-    String txHash = await _client.sendTransaction(_credentials, transaction,
-        chainId: _networkId);
-    TransactionReceipt? receipt;
-    try {
-      receipt = await _client.getTransactionReceipt(txHash);
-    } catch (err) {
-      print('could not get $txHash receipt, try again');
-    }
-    int delay = 1;
-    int retries = 10;
-    while (receipt == null) {
-      print('waiting for receipt');
-      await Future.delayed(new Duration(seconds: delay));
-      delay *= 2;
-      retries--;
-      if (retries == 0) {
-        throw 'transaction $txHash not mined yet...';
-      }
-      try {
-        receipt = await _client.getTransactionReceipt(txHash);
-      } catch (err) {
-        print('could not get $txHash receipt, try again');
-      }
-    }
-    return txHash;
+    await _client.sendTransaction(_credentials, transaction);
+    // TransactionReceipt? receipt;
+    // try {
+    //   receipt = await _client.getTransactionReceipt(txHash);
+    // } catch (err) {
+    //   print('could not get $txHash receipt, try again');
+    // }
+    // int delay = 1;
+    // int retries = 10;
+    // while (receipt == null) {
+    //   print('waiting for receipt');
+    //   await Future.delayed(new Duration(seconds: delay));
+    //   delay *= 2;
+    //   retries--;
+    //   if (retries == 0) {
+    //     throw 'transaction $txHash not mined yet...';
+    //   }
+    //   try {
+    //     receipt = await _client.getTransactionReceipt(txHash);
+    //   } catch (err) {
+    //     print('could not get $txHash receipt, try again');
+    //   }
+    // }
+    return "OK";
   }
 
   Future<EtherAmount> getBalance({String? address}) async {
@@ -118,7 +117,8 @@ class Web3 {
     } else {
       a = await _credentials.extractAddress();
     }
-    return await _client.getBalance(a);
+    var balance = await _client.getBalance(a);
+    return EtherAmount.fromUnitAndValue(EtherUnit.ether, balance['LYR']);
   }
 
   Future<String> transfer(

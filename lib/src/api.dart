@@ -19,6 +19,7 @@ class API extends Api {
   API(
     String base,
   )   : _base = base,
+        _jwtToken = "aaa",
         _client = Client();
 
   void setJwtToken(String jwtToken) {
@@ -223,7 +224,8 @@ class API extends Api {
       "backup": false,
       "phoneNumber": "1",
       "communityManager": "",
-      "transferManager": ""
+      "transferManager": "",
+      "dAIPointsManager": "",
     });
 /*     Map<String, dynamic> resp = await _get('v2/wallets', private: true);
     if (resp["data"] != null) {
