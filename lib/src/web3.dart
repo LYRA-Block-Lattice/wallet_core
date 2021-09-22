@@ -113,12 +113,13 @@ class Web3 {
   Future<EtherAmount> getBalance({String? address}) async {
     LyraAddress a;
     if (address != null && address != "") {
-      a = LyraAddress.fromHex(address);
+      a = LyraAddress.fromAccountId(address);
     } else {
       a = await _credentials.extractAddress();
     }
     var balance = await _client.getBalance(a);
-    return EtherAmount.fromUnitAndValue(EtherUnit.ether, balance['LYR']);
+    return EtherAmount.fromUnitAndValue(
+        EtherUnit.gwei, (balance['LYR']! * 1000000000).toInt().toString());
   }
 
   Future<String> transfer(
