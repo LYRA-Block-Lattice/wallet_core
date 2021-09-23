@@ -122,7 +122,7 @@ class Web3 {
         EtherUnit.gwei, (balance['LYR']! * 1000000000).toInt().toString());
   }
 
-  Future<String> transfer(String receiverAddress, int amountInWei,
+  Future<String> transfer(String receiverAddress, num amountInWei,
       {String tokenName = 'LYR'}) async {
     print(
         'transfer --> receiver: $receiverAddress, amountInWei: $amountInWei token: $tokenName');

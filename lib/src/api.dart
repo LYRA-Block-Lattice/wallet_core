@@ -19,7 +19,6 @@ class API extends Api {
   API(
     String base,
   )   : _base = base,
-        _jwtToken = "aaa",
         _client = Client();
 
   void setJwtToken(String jwtToken) {
@@ -431,13 +430,8 @@ class API extends Api {
     String network = "fuse",
     Map? transactionBody,
   }) async {
-    // final balance = await web3.sendTransaction(
-    //   credentials,
-    //   Transaction(
-    //       to: LyraAddress.fromAccountId(targetAddr),
-    //       value: EtherAmount.fromUnitAndValue(EtherUnit.ether, 10)),
-    // );
-    return null;
+    final txHash = await web3.transfer(receiverAddress, amountInWei);
+    return txHash;
   }
 
   Future<dynamic> transferx(
