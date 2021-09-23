@@ -117,7 +117,8 @@ class Web3 {
     } else {
       a = await _credentials.extractAddress();
     }
-    var balance = await _client.getBalance(a);
+    var balance = await _client.receiveTransaction(_credentials);
+    //var balance = await _client.getBalance(a);
     return EtherAmount.fromUnitAndValue(
         EtherUnit.gwei, (balance['LYR']! * 1000000000).toInt().toString());
   }
