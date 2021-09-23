@@ -122,26 +122,30 @@ class Web3 {
         EtherUnit.gwei, (balance['LYR']! * 1000000000).toInt().toString());
   }
 
-  Future<String> transfer(
-    String receiverAddress,
-    int amountInWei,
-  ) async {
-    print('transfer --> receiver: $receiverAddress, amountInWei: $amountInWei');
+  Future<String> transfer(String receiverAddress, int amountInWei,
+      {String tokenName = 'LYR'}) async {
+    print(
+        'transfer --> receiver: $receiverAddress, amountInWei: $amountInWei token: $tokenName');
 
-    bool isApproved = await _approveCb;
-    if (!isApproved) {
-      throw 'transaction not approved';
-    }
+    // bool isApproved = await _approveCb;
+    // if (!isApproved) {
+    //   throw 'transaction not approved';
+    // }
 
-    LyraAddress receiver = LyraAddress.fromHex(receiverAddress);
+    LyraAddress receiver = LyraAddress.fromAccountId(receiverAddress);
     EtherAmount amount = EtherAmount.fromUnitAndValue(
       EtherUnit.wei,
       BigInt.from(amountInWei),
     );
 
-    String txHash = await _sendTransactionAndWaitForReceipt(
-      Transaction(to: receiver, value: amount),
-    );
+    final sendResult = await _client.sendTransaction(
+        _credentials,
+        Transaction(
+          to: receiver,
+          value: amount,
+        ));
+
+    String txHash = sendResult['txHash'].toString();
     print('transction $txHash successful');
     return txHash;
   }

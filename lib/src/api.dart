@@ -431,6 +431,23 @@ class API extends Api {
     String network = "fuse",
     Map? transactionBody,
   }) async {
+    // final balance = await web3.sendTransaction(
+    //   credentials,
+    //   Transaction(
+    //       to: LyraAddress.fromAccountId(targetAddr),
+    //       value: EtherAmount.fromUnitAndValue(EtherUnit.ether, 10)),
+    // );
+    return null;
+  }
+
+  Future<dynamic> transferx(
+    Web3 web3,
+    String walletAddress,
+    String receiverAddress,
+    num amountInWei, {
+    String network = "fuse",
+    Map? transactionBody,
+  }) async {
     Map<String, dynamic> data = await web3.transferOffChain(
       walletAddress,
       receiverAddress,
