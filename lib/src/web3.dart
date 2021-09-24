@@ -119,6 +119,9 @@ class Web3 {
     }
     var balance = await _client.receiveTransaction(_credentials);
     //var balance = await _client.getBalance(a);
+    if (balance.isEmpty) {
+      return EtherAmount.zero();
+    }
     return EtherAmount.fromUnitAndValue(
         EtherUnit.gwei, (balance['LYR']! * 1000000000).toInt().toString());
   }
